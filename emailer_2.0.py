@@ -12,13 +12,21 @@ import time
 import openpyxl
 from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText 
+from email.mime.text import MIMEText
+
 print('emailer code program\nThat works')
 wb = openpyxl.load_workbook('D://raima//Desktop//Emailer//emails 102.xlsx')
 ws = wb['Sheet1']
 toSend = []
 toSend_names = []
-for i in range(2, ws.max_row + 1):
+start_email = 'contact@euroforgesupplies.com'
+start = 2
+# set start email
+for j in range(2, ws.max_row + 1):
+    email = ws.cell(row=j, column=1).value
+    if email == start_email:
+        j = start
+for i in range(start, ws.max_row + 1):
     email_receiver = ws.cell(row=i, column=1).value
     toSend.append(email_receiver)
     name = ws.cell(row=i, column=2).value
@@ -28,7 +36,6 @@ print('total emails = ' + str(len(toSend)))
 # username = str(input('Your Username:'))
 # password = str(input('Your Password:'))
 subject = 'Are you interested in Veterinary Instruments & Farrier Tools'
-
 
 # Create message container - the correct MIME type is multipart/alternative.
 # msg = MIMEMultipart()
@@ -137,27 +144,27 @@ def send_mail():
         # msg.attach(part1)
         # msg.attach(part2)
         email.set_content(text)
+
         # Attaching pdf
-
-        with open('D://raima//Desktop//Business//snb-main.pdf', 'rb') as f:
-            file_data = f.read()
-            file_name = 'SNB Main Catalog'
-        email.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
-
-        with open('D://raima//Desktop//Business//snb-vet.pdf', 'rb') as f:
-            file_data = f.read()
-            file_name = 'SNB Veterinary Catalog'
-        email.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
-
-        with open('D://raima//Desktop//Business//banner.jpg', 'rb') as image:
-            image_data = image.read()
-            image_type = imghdr.what(image.name)
-            image_name = 'SNB Banner'
-        email.add_attachment(image_data, maintype='image', subtype=image_type, filename=image_name)
+        # with open('D://raima//Desktop//Business//snb-main.pdf', 'rb') as f:
+        #     file_data = f.read()
+        #     file_name = 'SNB Main Catalog'
+        # email.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+        #
+        # with open('D://raima//Desktop//Business//snb-vet.pdf', 'rb') as f:
+        #     file_data = f.read()
+        #     file_name = 'SNB Veterinary Catalog'
+        # email.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+        #
+        # with open('D://raima//Desktop//Business//banner.jpg', 'rb') as image:
+        #     image_data = image.read()
+        #     image_type = imghdr.what(image.name)
+        #     image_name = 'SNB Banner'
+        # email.add_attachment(image_data, maintype='image', subtype=image_type, filename=image_name)
 
         server.send_message(email)
         print(str(m + 1) + '. sent to ' + str(toSend[m]))
-        time.sleep(10)
+        time.sleep(30)
 
 
 print('login...')
